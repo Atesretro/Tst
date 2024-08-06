@@ -9,12 +9,14 @@ click==8.1.7
 exceptiongroup==1.2.2
 Flask==3.0.3
 frozenlist==1.4.1
+gunicorn==22.0.0
 highrise-bot-sdk==24.1.0
 idna==3.7
 itsdangerous==2.2.0
 Jinja2==3.1.4
 MarkupSafe==2.1.5
 multidict==6.0.5
+packaging==24.1
 pendulum==2.1.2
 python-dateutil==2.9.0.post0
 pytzdata==2020.1
