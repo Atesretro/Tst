@@ -135,7 +135,7 @@ class Bot(BaseBot):
 
         
         if message.startswith("loop"):
-            emote_name = message.replace("Loop", "").strip()
+            emote_name = message.replace("loop", "").strip()
             if user.id in self.user_emote_loops and self.user_emote_loops[user.id] == emote_name:
                 await self.stop_emote_loop(user.id)
             else:
