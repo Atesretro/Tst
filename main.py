@@ -134,8 +134,8 @@ class Bot(BaseBot):
             await self.highrise.set_outfit(outfit=outfit)
 
         
-        if message.startswith("full"):
-            emote_name = message.replace("full", "").strip()
+        if message.startswith("loop"):
+            emote_name = message.replace("Loop", "").strip()
             if user.id in self.user_emote_loops and self.user_emote_loops[user.id] == emote_name:
                 await self.stop_emote_loop(user.id)
             else:
