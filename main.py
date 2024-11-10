@@ -15,7 +15,7 @@ import time
 class Bot(BaseBot):
     def __init__(self):
         super().__init__()
-        self.emote_looping = False
+        self.emote_looping = True
         self.user_emote_loops = {}
         self.loop_task = None
         self.following_users = []
@@ -25,7 +25,7 @@ class Bot(BaseBot):
             self.loop_task = asyncio.create_task(self.emote_loop())
         print("hi im alive?")
         await self.highrise.tg.create_task(self.highrise.teleport(
-            session_metadata.user_id, Position(10.5, 2.0, 9.5, "FrontLeft")))
+            session_metadata.user_id, Position(1, 1.0, 2, "FrontLeft")))
         await self.send_periodic_messages()
     
 
@@ -46,15 +46,16 @@ class Bot(BaseBot):
 
     async def send_periodic_messages(self):
         message_list = [
-            "Bugünki ruh haline uyan şarkı ne öğrenmek ister misin? Şarkı yaz ve öğren!",
-            "Gelecekte seni neler bekliyor olabilir? Fal yazarak bahtını öğrenebilirsin!",
-            "Eğer komik bir şey duyamaya ihtiyacın varsa espri yaz ve eğlenmene bak!",
-            "Birilerini düşürmek için güzel sözlere ihtiyacın varsa sana yardımcı olabilirim! Tek yapman gereken rizz yazmak!",
-            "Laf sokmada en  iyisi kim biliyor musun? Tabii ki de ben, inanmıyorsan laf yazman yeterli!",
-            "Birisi ile arandaki aşk oranını öğrenmek için: aşk @kullanıcıadı",
-            "Birisi ile arandaki dostluk oranını öğrenmek için: dostluk @kullanıcıadı",
-            "Birisi ile arandaki nefret oranını öğrenmek için: nefret @kullanıcıadı",
-            "Birisi ile arandaki güven oranını öğrenmek için: güven @kullanıcıadı"
+            "Would you like to find out which song fits your mood today? Write the 'Song' and find out!",
+            "What might the future hold for you? You can find out your 'Fortune' by writing a prediction!",
+            "If you need to hear something funny, write a 'Joke' and enjoy yourself!",
+            "If you need some smooth lines to impress someone, I can help! All you need to do is write some 'Rizz'!",
+            "Do you know who’s the best at throwing shade? Of course, it's me! If you don't believe it, just write a 'Line' and see for yourself!",
+            "To find out the love percentage between you and someone: love @username",
+            "To find out the friendship percentage between you and someone: friendship @username",
+            "To find out the hate percentage between you and someone: hate @username",
+            "To find out the trust percentage between you and someone: trust @username",
+            "My daddy @Atekinz 🤓"
         ]
         index = 0
         while True:
@@ -85,7 +86,7 @@ class Bot(BaseBot):
             await asyncio.sleep(0.5)
 
     async def on_chat(self, user: User, message: str) -> None:
-        if message.lower().startswith("takip2") and await self.is_user_allowed(user):
+        if message.lower().startswith("follow2") and await self.is_user_allowed(user):
             target_username = message.split('@')[-1].strip()
             if target_username:
                 room_users = (await self.highrise.get_room_users()).content
@@ -98,13 +99,13 @@ class Bot(BaseBot):
                     self.following_users = []  # Önceki takipleri durdur
                     await self.follow(target_user)  # Yeni kullanıcıyı takip et
                 else:
-                    await self.highrise.chat("Oyuncu odada değil!")
+                    await self.highrise.chat("The player is not in the room!")
             else:
-                await self.highrise.chat("Takip edilecek kişiyi belirtmediniz.")
+                await self.highrise.chat("You did not specify the person to follow.")
 
         if message.lower() == "stay2" and await self.is_user_allowed(user):
             self.following_users = []
-            await self.highrise.chat("Takip etmeyi bıraktım.")
+            await self.highrise.chat("I stopped following.")
         
         if message.lower().startswith("degis2") and await self.is_user_allowed(user):
             # Randomly select active color palettes
@@ -225,7 +226,7 @@ class Bot(BaseBot):
                 emote_to_send = secili_emote[emote_name]["value"]
                 await self.highrise.send_emote(emote_to_send, user.id)
             except:
-                print("Dans emote gönderilirken bir hata oluştu.")
+                print("A mistake occurred while sending the dance emote.")
 
         message_lower = message.lower()
         parts = message_lower.split("@")
@@ -238,12 +239,12 @@ class Bot(BaseBot):
 
             message_type = message_lower.split()[0]
             response_generators = {
-                "ask": get_love_message,
-                "aşk": get_love_message,
-                "dostluk": get_friendship_message,
-                "nefret": get_hate_message,
-                "güven": get_trust_message,
-                "guven": get_trust_message
+                "love": get_love_message,
+                "lovers": get_love_message,
+                "friendship": get_friendship_message,
+                "hate": get_hate_message,
+                "trust": get_trust_message,
+                "trusts": get_trust_message
             }
 
             if message_type in response_generators:
@@ -256,21 +257,20 @@ class Bot(BaseBot):
         command = message.lower().split()[0]  # Extract the first word from the message
         message_dict = {
             "rizz": rizz_mesaj,
-            "naber": nbr_mesaj,
-            "nasılsın": nasl_mesaj,
-            "nasilsin": nasl_mesaj,
-            "espiri": espiri_mesaj,
-            "espri": espiri_mesaj,
-            "laf": laf_mesaj,
-            "sarki": sarki_mesaj,
-            "şarki": sarki_mesaj,
-            "şarkı": sarki_mesaj,
-            "fal": fal_mesaj,
-            "yemek": yemek_mesaj
+            "hru": nbr_mesaj,
+            "wtsp": nasl_mesaj,
+            "whats up": nasl_mesaj,
+            "joke": espiri_mesaj,
+            "haha": espiri_mesaj,
+            "line": laf_mesaj,
+            "song": sarki_mesaj,
+            "music": sarki_mesaj,
+            "fortune": fal_mesaj,
+            "meal": yemek_mesaj
         }
 
         if command == "help":
-            commands = "rizz, naber, nasilsin, espri, laf, sarki,fal"
+            commands = "rizz, hru, wtsp, joke, line, song, fortune, meal\n- Commands you can use with your friends;\n love @, friendship @, hate @, trust @ "
             await self.highrise.chat(commands)
             return
 
@@ -306,7 +306,7 @@ class Bot(BaseBot):
                     await self.highrise.send_emote(emote_to_send, user_id)
                 except Exception as e:
                     if "Target user not in room" in str(e):
-                        print(f"{user_id} odada değil, emote gönderme durduruluyor.")
+                        print(f"{user_id} In the room, sending emotes is disabled.")
                         break
                 await asyncio.sleep(emote_time)
 
@@ -373,7 +373,7 @@ class Bot(BaseBot):
 
     async def is_user_allowed(self, user: User) -> bool:
         user_privileges = await self.highrise.get_room_privilege(user.id)
-        return user_privileges.moderator or user.username in ["kavsak", "The.Ciyo", "wisowe", "Ixien"]
+        return user_privileges.moderator or user.username in ["Atekinz"]
 
 
   
@@ -396,8 +396,8 @@ class WebServer():
     t.start()
     
 class RunBot():
-  room_id = "66a7ac107d5eee32f24ea36e"
-  bot_token = "88ce933235c858601f9385356797555a4e8204fe45ce2d70ef553bc17dbd467d"
+  room_id = "64e80327e64dcdf6d947c4aa"
+  bot_token = "02fe34e9541b8602126fb9cec7e66b33162d10db66305b9ec2e522f34e447218"
   bot_file = "main"
   bot_class = "Bot"
 
