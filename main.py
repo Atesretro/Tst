@@ -55,7 +55,9 @@ class Bot(BaseBot):
             "To find out the friendship percentage between you and someone: friendship @username",
             "To find out the hate percentage between you and someone: hate @username",
             "To find out the trust percentage between you and someone: trust @username",
-            "My daddy @Atekinz 🤓"
+            "My daddy @Atekinz 🤓",
+            "For Mod inquiries contact the Hiring Committee for interviews.",
+            "For Mod inquiries contact the Hiring Committee for interviews."
         ]
         index = 0
         while True:
